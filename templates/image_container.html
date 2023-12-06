@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="row" >
+        {% for car in cars %}
+            <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card " style="height: 100%;">
+                    <img id="{{ car.brand }}" class="images" src="data:image/jpeg;base64,{{ car.image_data }}" alt="{{ car.brand }} " style="height: 200px; width: auto;"> 
+                    <div class="card-body">
+                        <h5 class="card-title"> {{ car.brand }}</h5>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

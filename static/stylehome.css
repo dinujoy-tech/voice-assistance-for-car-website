@@ -1,0 +1,106 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #333;
+    color: white;
+  position:absolute;
+    text-align: center;
+    height: 10%;
+}
+
+.body-container {
+    
+    background-size: cover; /* Make the background image responsive */
+    background-position: center;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+button#open-modal {
+    position: absolute;
+    bottom: 30px;
+    right: 20px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+#modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  height:30%;
+    background-color: #ffffff; /* White background */
+    width: 300px; /* Adjust the width as needed */
+    padding: 20px;
+    border-radius: 10px; /* Increase the border radius for a rounded appearance */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    text-align: center; /* Center the text */
+    font-size: 18px;
+    line-height: 1.5;
+    color: #333; /* Text color */
+}
+
+.close {
+    float: right;
+    cursor: pointer;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-top: 10px;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    height: 10%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        height: 15%;
+    }
+
+    .body-container {
+        height: 65%;
+    }
+
+    button#open-modal {
+        bottom: 10px;
+    }
+}
+/* CSS styles for the border effect */
+.border-effect {
+    border: 5px solid transparent; /* Initial border style (e.g., transparent) */
+    transition: border 0.3s ease-in-out; /* Transition effect for the border */
+}
+
+/* CSS styles for the border effect when it's active */
+.border-effect.active {
+    border-color: #f50000; /* Final border color (e.g., red) */
+}

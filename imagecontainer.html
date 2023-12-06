@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cool Navbar</title>
+
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        /* Add your custom CSS styles here */
+        .navbar {
+            background-color: #222; /* Dark background color */
+        }
+        .navbar-dark .navbar-nav .nav-link {
+            color: #fff; /* White text color for nav links */
+        }
+        .navbar-dark .navbar-toggler-icon {
+            background-color: #fff; /* White color for the menu icon */
+        }
+        .navbar-dark .navbar-toggler {
+            border-color: #fff; /* White border color for the menu icon */
+        }
+      /* Define the initial state of the image container */
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%; /* Adjust the width and height to match your image dimensions */          display:flex;
+            height: 100%;
+        }
+
+        /* Define the image with a border */
+        .images {
+            width: 300px; /* Adjust the width and height to match your image dimensions */
+            height: 400px;
+            border-radius: 10px;
+            margin:25px;
+            border: 5px solid #0c8de342;
+        }
+
+        /* Define the animation for the border effect */
+        @keyframes revealBorder {
+            0% {
+                border-color: transparent;
+            }
+            100% {
+                border-color: #3498db; /* Final border color */
+            }
+        }
+
+        /* Apply the animation to the image when it's first displayed */
+        .images {
+            animation: revealBorder 2s ease-in-out; /* Adjust the animation duration as needed */
+       }
+    </style>
+  
+</head>
+<body>
+  <script>
+    var loadedImages = 0;
+    // Calculate the total number of images
+    var totalImages =  {{ images|length }};
+    window.SpeechRecognition = window.webkitSpeechRecognition;
+
+     const recognition = new SpeechRecognition();
+     recognition.interimResults = true;
+    function speakText(text) {
+            var synth = window.speechSynthesis;
+            var utterance = new SpeechSynthesisUtterance(text);
+            synth.speak(utterance);
+            loadedImages++;
+          if (loadedImages === totalImages) {
+          // Call your JavaScript function when all images are loaded
+             recognition.start();
+      }
+    }
+     var transcript="";
+     recognition.addEventListener('result', e => {
+          transcript = Array.from(e.results)
+             .map(result => result[0])
+             .map(result => result.transcript)
+             .join('')
+
+        
+     });
+    
+     recognition.addEventListener('end', async e => {
+       connect_todialogflow(transcript);
+     });
+  </script>
+<!-- Navigation bar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">Cool Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Services</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Contact</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+  <div id="image-container">
+      <!-- Images and text-to-speech will be added dynamically here -->
+    {% for image in images %}
+        <img class="images" 
+             src="data:image/jpeg;base64,{{ image.image_data }}" 
+             alt="{{ image.filename }}" 
+             onload="speakText('{{ image.filename }}')" >
+    {% endfor %}
+    
+  </div>
+
+<!-- Include Bootstrap JS (jQuery and Popper.js are required) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+<script>
+  function connect_todialogflow(request) { 
+    console.log(request);
+    var url = '/dialog';
+    var data = {
+        text: request
+    };
+    var headers = {
+        'Content-Type': 'application/json'  // Set the content type to JSON
+    };
+    fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+  }
+</script>
+</body>
+</html>
